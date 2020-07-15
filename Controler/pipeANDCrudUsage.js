@@ -18,12 +18,11 @@ client.connect(async function (err) {
     const db = client.db("mongoDataBase");
 
 
-    //Finding the documents that is already in our database (Working alone)
+    //Finding the documents that is already in our database (Working)
     crud.findDocuments(db, res => {
         const commitedDocuments = res.map(function (document) {
             return document.item.id
         });
-        client.close();
 
         //Finding the register that isn't in our database (Working)
         pipedrive.filterDealsByStatus('won')
@@ -35,17 +34,16 @@ client.connect(async function (err) {
                         return false
                 })
 
-                //Inserting the documents that ins't in our database (WORKING ONLY ALONE[Need to FIX])
+                //Inserting the documents that ins't in our database (Working)
                 crud.insertDocuments(db, res => {
                     console.log("==Novos documentos inseridos");
                     console.log(res)
                 }, filteredResult)
-
             })
             .catch(e => {
                 console.log(`Error with Pipedrive: ${e}`)
             })
 
-        client.close();
+        //client.close();
     })
 });
