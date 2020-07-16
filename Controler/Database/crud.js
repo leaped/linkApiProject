@@ -4,7 +4,7 @@ require('dotenv').config()
 //InsertDocuments - As parameters
 const insertDocuments = async function (db, callback, objetos) {
     // Get the documents collection
-    const collection = db.collection('teste1');
+    const collection = db.collection('betaTeste');
     // Insert some documents
     await collection.insertMany(objetos , function (err, result) {
         if (err)
@@ -16,7 +16,7 @@ const insertDocuments = async function (db, callback, objetos) {
 //Find Documents - All
 const findDocuments = function (db, callback) {
     // Get the documents collection
-    const collection = db.collection('teste1');
+    const collection = db.collection('betaTeste');
     // Find some documents
     collection.find({}).toArray(function (err, docs) {
         callback(docs);
