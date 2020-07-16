@@ -12,6 +12,3 @@ const filterDealsByStatus = async function (status){
 module.exports = {
     filterDealsByStatus
 }
-
-//Bring all register
-//const url = `https://${process.env.pipedrive_CompanyDomain}.pipedrive.com/api/v1/deals?limit=500&api_token=${process.env.pipedrive_APITOKEN}`
