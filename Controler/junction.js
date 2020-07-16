@@ -2,10 +2,12 @@
 const MongoClient = require('mongodb').MongoClient;
 const crud = require('./Database/crud')
 const pipedrive = require('./externalAPIs/pipedrive')
-require('dotenv').config()
-module.exports.refreshWonDeals = function (req, res) {
+const bling = require('./externalAPIs/bling')
+const date = new Date
 
-}
+require('dotenv').config()
+
+
 
 
 
@@ -14,7 +16,6 @@ const client = new MongoClient(process.env.database_CONNECTIONSTRING, { useNewUr
 client.connect(async function (err) {
     if (err)
         console.log(err)
-
     const db = client.db("mongoDataBase");
 
 
@@ -27,7 +28,32 @@ client.connect(async function (err) {
         //Finding the register that isn't in our database (Working)
         pipedrive.filterDealsByStatus('won')
             .then(async function (resp) {
-                const filteredResult = resp.data.data.items.filter(function (value) {
+                //Inserting the deals on BLING
+                const deals = resp.data.data.items
+
+                const logDatabase = []
+                deals.forEach(async function (element) {
+                    const blingReturn = await bling.insertOrder(element.item.id + 'teste14', element.item.title)
+                        .then(response => {
+                            return response.data
+                        })
+
+                    const order = blingReturn.retorno.pedidos[0]
+                    logDatabase.push({
+                        registerDate: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`,
+                        dealId: element.item.id,
+                        dealTitle: element.item.title,
+                        dealValue: element.item.value,
+                        orderID: order.pedido.idPedido
+                    })
+                    if(logDatabase.length == 19)
+                        console.log(logDatabase[18])
+                })
+
+                return
+
+                //=================================================================
+                const filteredResult = deals.filter(function (value) {
                     if (commitedDocuments.indexOf(value.item.id) === -1)
                         return true
                     else
@@ -40,7 +66,7 @@ client.connect(async function (err) {
                 } else {
                     console.log("Todos documentos inseridos já")
                     /*  
-                    const registerRepeated = resp.data.data.items.filter(function (value) {
+                    const registerRepeated = deals.filter(function (value) {
                         if (commitedDocuments.indexOf(value.item.id) === -1)
                             return false
                         else
@@ -56,3 +82,8 @@ client.connect(async function (err) {
         //client.close();
     })
 });
+
+
+module.exports.refreshWonDeals = function (req, res) {
+
+}
