@@ -3,6 +3,7 @@ const pipedrive = require('../Model/externalAPIs/pipedrive')
 const bling = require('../Model/externalAPIs/bling')
 const date = new Date
 
+
 require('dotenv').config()
 
 const refreshWonDeals = async function (request, response) {
@@ -12,7 +13,7 @@ const refreshWonDeals = async function (request, response) {
             let count = 1
             const logDatabase = []
             deals.forEach(async function (element) {
-                const blingReturn = await bling.insertOrder(element.item.id + 'beta13', element.item.title, element.item.value)
+                const blingReturn = await bling.insertOrder(element.item.id, element.item.title, element.item.value)
                     .then(response => {
                         return response.data
                     })
@@ -20,7 +21,7 @@ const refreshWonDeals = async function (request, response) {
                 if (blingReturn.retorno.pedidos) {
                     const order = blingReturn.retorno.pedidos[0]
                     logDatabase.push({
-                        registerDate: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`,
+                        registerDate: `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`,
                         dealId: element.item.id,
                         dealTitle: element.item.title,
                         dealValue: element.item.value,

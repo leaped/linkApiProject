@@ -19,7 +19,9 @@ const insertDocuments = async function (callback, objetos) {
             if (err)
                 console.log(err)
             callback(result);
+            client.close()
         });
+        
     })
 }
 
@@ -39,11 +41,11 @@ const findDocuments = function (callback) {
         const collection = db.collection(process.env.database_COLLECTION)
         collection.find({}).toArray(function (err, docs) {
             callback(docs);
+            client.close()
         });
+        
     })
 }
-
-findDocuments(console.log)
 
 module.exports = {
     findDocuments,
