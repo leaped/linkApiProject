@@ -25,7 +25,7 @@ const refreshWonDeals = function (request, response) {
                 let count = 1
                 const logDatabase = []
                 deals.forEach(async function (element) {
-                    const blingReturn = await bling.insertOrder(element.item.id + 'beta11', element.item.title, element.item.value)
+                    const blingReturn = await bling.insertOrder(element.item.id + 'beta12', element.item.title, element.item.value)
                         .then(response => {
                             return response.data
                         })
@@ -46,8 +46,7 @@ const refreshWonDeals = function (request, response) {
 
                     if(count == deals.length){
                         if (logDatabase.length != 0) {
-                            crud.insertDocuments(db, res => { 
-                                //console.log(res)
+                            crud.insertDocuments(db, res => {
                                 response.send({
                                     "Status": "Ok",
                                     "data": res

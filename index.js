@@ -11,11 +11,7 @@ const server = restify.createServer({
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
- 
-// server.post('/echo', function (req, res, next) {
-//   res.send(req.body.name)
-//   console.log(req.body)
-// });
+
 routes.routes(server)
 
 
